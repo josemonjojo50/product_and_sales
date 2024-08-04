@@ -47,9 +47,6 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public void deleteAllProducts() {
-        productRepository.deleteAll();
-    }
     
     public double getTotalRevenue() {
         List<Sale> sales = saleRepository.findAll();

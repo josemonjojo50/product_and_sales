@@ -27,9 +27,6 @@ public class ProductsAndSalesApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-    	
-    	productService.deleteAllProducts();
-        saleService.deleteAllSales();
         
         Product product1 = new Product("Product 1", "Description 1", 100.0, 10);
         Product product2 = new Product("Product 2", "Description 2", 200.0, 20);
