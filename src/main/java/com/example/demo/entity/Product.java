@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,12 +24,12 @@ public class Product {
     private int quantity;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Sale> sales = new ArrayList<>();
 
     public Product() {}
 
-    public Product(int id,String name, String description, double price, int quantity) {
-        this.id=id;
+    public Product(String name, String description, double price, int quantity) {
     	this.name = name;
         this.description = description;
         this.price = price;
@@ -75,8 +76,6 @@ public class Product {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-	
 
     public List<Sale> getSales() {
         return sales;
