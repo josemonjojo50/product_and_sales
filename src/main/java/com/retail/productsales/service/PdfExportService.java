@@ -26,6 +26,7 @@ public class PdfExportService {
 			document.open();
 			Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
 			Paragraph title = new Paragraph("Product Report", font);
+			title.setSpacingAfter(15f);
 			document.add(title);
 
 			PdfPTable table = new PdfPTable(6);
