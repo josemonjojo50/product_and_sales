@@ -2,155 +2,192 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Product Management</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+	<title>Product Management</title>
+	<style>
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
-        th,
-        td {
-            border: 1px solid #aaa;
-            padding: 8px;
-            text-align: left;
-        }
+		th,
+		td {
+			border: 1px solid #aaa;
+			padding: 8px;
+			text-align: left;
+		}
 
-        .actions a,
-        .actions form {
-            display: inline-block;
-            margin-right: 5px;
-        }
+		.actions a,
+		.actions form {
+			display: inline-block;
+			margin-right: 5px;
+		}
 
-        .button-container {
-            margin-bottom: 20px;
-        }
+		.button-container {
+			margin-bottom: 20px;
+		}
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 15px;
-            background-color: #007BFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            font-size: 16px;
-        }
+		.btn {
+			display: inline-block;
+			padding: 10px 20px;
+			margin-right: 15px;
+			background-color: #007BFF;
+			color: white;
+			text-decoration: none;
+			border-radius: 4px;
+			font-weight: bold;
+			cursor: pointer;
+			border: none;
+			font-size: 16px;
+		}
 
-        .btn:hover {
-            background-color: #0056b3;
-        }
+		.btn:hover {
+			background-color: #0056b3;
+		}
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1000;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.5);
+		}
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 300px;
-            position: relative;
-            border-radius: 8px;
-            text-align: center;
-        }
+		.modal-content {
+			background-color: #fefefe;
+			margin: 15% auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 300px;
+			position: relative;
+			border-radius: 8px;
+			text-align: center;
+		}
 
-        .close-btn {
-            position: absolute;
-            top: 8px;
-            right: 12px;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+		.close-btn {
+			position: absolute;
+			top: 8px;
+			right: 12px;
+			color: #aaa;
+			font-size: 28px;
+			font-weight: bold;
+			cursor: pointer;
+		}
 
-        .close-btn:hover {
-            color: black;
-        }
+		.close-btn:hover {
+			color: black;
+		}
 
-        .btn.delete-btn {
-            background-color: #dc3545;
-        }
+		.btn.delete-btn {
+			background-color: #dc3545;
+		}
 
-        .btn.delete-btn:hover {
-            background-color: #a71d2a;
-        }
-
-        .pagination a {
-            margin: 0 5px;
-            padding: 8px 16px;
-            border: 1px solid #007BFF;
-            color: #007BFF;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-
-        .pagination a.current {
-            background-color: #007BFF;
-            color: white;
-        }
-    </style>
+		.btn.delete-btn:hover {
+			background-color: #a71d2a;
+		}
+	</style>
 </head>
 
 <body>
-    <h1>Product List</h1>
+	<h1>Product List</h1>
 
-    <div class="button-container">
-        <a th:href="@{/api/products/download/pdf}" target="_blank" class="btn">Download PDF</a>
-        <button id="revenueBtn" class="btn">Total Revenue</button>
-    </div>
+	<div class="button-container">
+		<a th:href="@{api/products/download/pdf}" target="_blank" class="btn">Download PDF</a>
+		<button id="revenueBtn" class="btn">Total Revenue</button>
+	</div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="product : ${productPage.content}">
-                <td th:text="${product.id}">1</td>
-                <td th:text="${product.name}">Product Name</td>
-                <td th:text="${product.description}">Description</td>
-                <td th:text="${product.price}">0.00</td>
-                <td th:text="${product.quantity}">0</td>
-                <td class="actions">
-                    <button type="button" class="btn" th:attr="data-id=${product.id}"
-                        onclick="getProductRevenue(this)">Get Revenue By Product</button>
-                    <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post"
-                        th:object="${product}">
-                        <input type="hidden" name="_method" value="delete" />
-                        <button type="submit" class="btn delete-btn">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Price</th>
+				<th>Quantity</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="product : ${productPage.content}">
+				<td th:text="${product.id}">1</td>
+				<td th:text="${product.name}">Product Name</td>
+				<td th:text="${product.description}">Description</td>
+				<td th:text="${product.price}">0.00</td>
+				<td th:text="${product.quantity}">0</td>
+				<td class="actions">
+					<button type="button" class="btn" th:attr="data-id=${product.id}"
+						onclick="getProductRevenue(this)">Get Revenue By Product</button>
+					<form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" th:object="${product}">
+						<input type="hidden" name="_method" value="delete" />
+						<button type="submit" class="btn delete-btn">Delete</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
-    <!-- Pagination -->
-    <div class="pagination" style="margin-top: 20px;" th:if="${totalPages > 1}">
-        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-            <a th:href="@{/products(page=${i})}"
-               th:classappend="${i == currentPage} ? 'current'" 
-               th:text="${i + 1}">1</a>
-        </span>
-    </div>
+	<div class="pagination" style="margin-top: 20px;" th:if="${totalPages > 1}">
+		<span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+			<a th:href="@{/products(page=${i})}" th:classappend="${i == currentPage} ? 'current'"
+				th:text="${i + 1}">1</a>
+		</span>
+	</div>
 
-    <!
+	<div id="revenueModal" class="modal">
+		<div class="modal-content">
+			<span class="close-btn" id="closeModal">&times;</span>
+			<h2>Product Revenue</h2>
+			<p id="revenueValue">Loading...</p>
+		</div>
+	</div>
+
+	<script>
+		const modal = document.getElementById('revenueModal');
+		const revenueBtn = document.getElementById('revenueBtn');
+		const closeModal = document.getElementById('closeModal');
+		const revenueValue = document.getElementById('revenueValue');
+
+		revenueBtn.onclick = function () {
+			modal.style.display = "block";
+			revenueValue.textContent = 'Loading...';
+			fetch('/api/products/revenue')
+				.then(response => response.json())
+				.then(data => {
+					revenueValue.textContent = 'Total Revenue: $' + data.toFixed(2);
+				})
+				.catch(err => {
+					revenueValue.textContent = 'Error loading revenue';
+				});
+		}
+
+		function getProductRevenue(button) {
+			const productId = button.getAttribute('data-id');
+			modal.style.display = "block";
+			revenueValue.textContent = 'Loading...';
+			fetch('api/products/revenue/' + productId)
+				.then(response => response.json())
+				.then(data => {
+					revenueValue.textContent = 'Revenue for Product ID ' + productId + ': $' + data.toFixed(2);
+				})
+				.catch(err => {
+					revenueValue.textContent = 'Error loading revenue';
+				});
+		}
+
+		closeModal.onclick = function () {
+			modal.style.display = "none";
+		}
+
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+	</script>
+
+</body>
+
+</html>
